@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:15:21 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/21 17:00:37 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/21 17:59:56 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,13 @@ static void	add_tex(t_map *m, char **a)
 	
 	s = ft_strtrim(a[1], "\n");
 	if (!ft_strncmp("NO", a[0], 2))
-		m->no_tex = ft_strdup(s);
+		m->no_tex = ft_substr(a[1], 0, ft_strlen(a[1]) - 1);
 	else if (!ft_strncmp("SO", a[0], 2))
-		m->so_tex = ft_strdup(s);
+		m->so_tex = ft_substr(a[1], 0, ft_strlen(a[1]) - 1);
 	else if (!ft_strncmp("WE", a[0], 2))
-		m->we_tex = ft_strdup(s);
+		m->we_tex = ft_substr(a[1], 0, ft_strlen(a[1]) - 1);
 	else
-		m->ea_tex = ft_strdup(s);
+		m->ea_tex = ft_substr(a[1], 0, ft_strlen(a[1]) - 1);
 	free(s);
 }
 

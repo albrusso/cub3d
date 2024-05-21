@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 16:35:00 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/21 17:29:19 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/21 17:51:14 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ double deg_to_rad(double degrees) {
 static void	add_line_to_img(t_data *d, int i, int top, int bottom, int color)
 {
 	for (int y = top; y < bottom; y++)
-		mlx_pixel_put(d->mlx_ptr, d->mlx_win, i, y, color);
+		d->i->data[y * WIN_X + i] = color;
 }
 
 void	render(t_data *d)

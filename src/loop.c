@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 17:43:18 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/21 17:02:17 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/21 18:07:28 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,129 @@ int	background(void *_d)
 		x = -1;
 		while (++x < WIN_X)
 		{
-			if (y > WIN_Y / 2)
+			if (y >= WIN_Y / 2)
 				d->i->data[y * WIN_X + x] = d->m->frgb;
 			else if (y < WIN_Y / 2)
 				d->i->data[y * WIN_X + x] = d->m->crgb;
 		}
 	}
+	render(d);
 	mlx_put_image_to_window(d->mlx_ptr, d->mlx_win, d->i->ptr, 0, 0);
 	return (0);
+}
+
+void	angle(int keypress, t_data *d)
+{
+	if (keypress == TURN_LEFT)
+	{
+		d->p->move_x = d->p->move_x * cos(-0.05) \
+		- d->p->move_y * sin(-0.05);
+		d->p->move_y = d->p->move_x * sin(-0.05) \
+		+ d->p->move_y * cos(-0.05);
+		d->p->rot_x = d->p->rot_x * cos(-0.05) \
+		- d->p->rot_y * sin(-0.05);
+		d->p->rot_y = d->p->rot_x * sin(-0.05) \
+		+ d->p->rot_y * cos(-0.05);
+	}
+	if (keypress == TURN_RIGHT)
+	{
+		d->p->move_x = d->p->move_x * cos(0.05) \
+		- d->p->move_y * sin(0.05);
+		d->p->move_y = d->p->move_x * sin(0.05) \
+		+ d->p->move_y * cos(0.05);
+		d->p->rot_x = d->p->rot_x * cos(0.05) \
+		- d->p->rot_y * sin(0.05);
+		d->p->rot_y = d->p->rot_x * sin(0.05) \
+		+ d->p->rot_y * cos(0.05);
+	}
+}
+
+int	check_wall_up(t_player *player, char **map)
+{
+	double	safe;
+
+	safe = 0.1;
+	if (map[(int)(player->y + player->move_y * (0.1 + safe))]
+		[(int)(player->x + player->move_x * (0.1 + safe))] == '1')
+		return (0);
+	return (1);
+}
+
+int	check_wall_down(t_player *player, char **map)
+{
+	double	safe;
+
+	safe = 0.1;
+	if (map[(int)(player->y - player->move_y * (0.1 + safe))]
+		[(int)(player->x - player->move_x * (0.1 + safe))] == '1')
+		return (0);
+	return (1);
+}
+
+int	check_wall_right(t_player *player, char **map)
+{
+	double	safe;
+
+	safe = 0.1;
+	if (map[(int)(player->y + player->move_x * (0.1 + safe))]
+		[(int)(player->x - player->move_y * (0.1 + safe))] == '1')
+		return (0);
+	return (1);
+}
+
+int	check_wall_left(t_player *player, char **map)
+{
+	double	safe;
+
+	safe = 0.1;
+	if (map[(int)(player->y - player->move_x * (0.1 + safe))]
+		[(int)(player->x + player->move_y * (0.1 + safe))] == '1')
+		return (0);
+	return (1);
+}
+
+void	check_move_u(t_player *player, int keypress, char **map)
+{
+	if (keypress == UP && check_wall_up(player, map))
+	{
+		player->y += player->move_y * 0.1;
+		player->x += player->move_x * 0.1;
+	}
+}
+
+void	check_move_d(t_player *player, int keypress, char **map)
+{
+	if (keypress == DOWN && check_wall_down(player, map))
+	{
+		player->y -= player->move_y * 0.1;
+		player->x -= player->move_x * 0.1;
+	}
+}
+
+void	check_move_r(t_player *player, int keypress, char **map)
+{
+	if (keypress == RIGHT && check_wall_right(player, map))
+	{
+		player->y += player->move_x * 0.1;
+		player->x -= player->move_y * 0.1;
+	}
+}
+
+void	check_move_l(t_player *player, int keypress, char **map)
+{
+	if (keypress == LEFT && check_wall_left(player, map))
+	{
+		player->y -= player->move_x * 0.1;
+		player->x += player->move_y * 0.1;
+	}
+}
+
+void	check_move(t_data *d, int keypress)
+{
+	check_move_u(d->p, keypress, d->m->map);
+	check_move_d(d->p, keypress, d->m->map);
+	check_move_r(d->p, keypress, d->m->map);
+	check_move_l(d->p, keypress, d->m->map);
 }
 
 int	keypress(int code, void *_d)
@@ -52,6 +167,11 @@ int	keypress(int code, void *_d)
 	d = (t_data *)_d;
 	if (code == ESC)
 		cleanup(d);
+	if (code == UP || code == DOWN || \
+		code == LEFT || code == RIGHT)
+		check_move(d, code);
+	if (code == TURN_LEFT || code == TURN_RIGHT)
+		angle(code, d);
 	return (0);
 }
 
@@ -65,8 +185,7 @@ void	loop(t_data *d)
 	load_img(d, d->ea, d->m->ea_tex);
 	d->i->ptr = mlx_new_image(d->mlx_ptr, WIN_X, WIN_Y);
 	d->i->data = (int *)mlx_get_data_addr(d->i->ptr, &d->i->bits, &d->i->len, &d->i->endian);
-	render(d);
 	mlx_hook(d->mlx_win, 2, 1L << 0, keypress, d);
-	// mlx_loop_hook(d->mlx_ptr, background, d);
+	mlx_loop_hook(d->mlx_ptr, background, d);
 	mlx_loop(d->mlx_ptr);
 }

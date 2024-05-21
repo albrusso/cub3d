@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:11:56 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/21 17:27:34 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/21 18:04:29 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,14 +58,13 @@ typedef struct s_raycast
 
 typedef struct s_player
 {
-	int	x;
-	int	y;
-	double	angle;
+	double	x;
+	double	y;
+	double	move_x;
+	double	move_y;
+	double	rot_x;
+	double	rot_y;
 	double	dir;
-	float	fov;
-	bool	spin;
-	bool	lateral_move;
-	bool	vertical_move;
 }	t_player;
 
 // typedef struct rgb
