@@ -6,45 +6,31 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 14:02:18 by albrusso          #+#    #+#             */
-/*   Updated: 2024/03/15 19:55:57 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/04/23 15:31:38 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_check(char c, char const *set)
-{
-	size_t	i;
-
-	i = 0;
-	while (set[i])
-	{
-		if (set[i] == c)
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
 char	*ft_strtrim(char const *s1, char const *set)
 {
-	char	*strtrimmed;
-	size_t	i;
-	size_t	j;
-	size_t	k;
+	int		start;
+	int		end;
+	char	*s;
 
-	i = 0;
-	while (s1[i] && ft_check(s1[i], set))
-		i++;
-	j = ft_strlen(s1);
-	while (j > i && ft_check(s1[j - 1], set))
-		j--;
-	strtrimmed = (char *)malloc((j - i + 1));
-	if (!strtrimmed)
+	if (!s1 || !set)
 		return (NULL);
-	k = 0;
-	while (i < j)
-		strtrimmed[k++] = s1[i++];
-	strtrimmed[k] = '\0';
-	return (strtrimmed);
+	start = 0;
+	end = ft_strlen(s1) - 1;
+	while (ft_strchr(set, s1[start]) && start <= end)
+		start++;
+	if (start > end)
+		return (ft_strdup(s1 + end + 1));
+	while (ft_strchr(set, s1[end]) && end >= 0)
+		end--;
+	s = ft_calloc(end - start + 3, 1);
+	if (!s)
+		return (NULL);
+	ft_strlcpy(s, &s1[start], end - start + 2);
+	return (s);
 }

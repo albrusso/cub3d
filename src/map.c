@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:15:21 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/21 14:08:30 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/21 17:00:37 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,19 +141,31 @@ static void	is_close(t_data *d)
 	}
 }
 
-int	nseo(char c)
+int	nsew(char c)
 {
 	if (c == 'N' || c == 'S'
-		|| c == 'O' || c == 'E')
+		|| c == 'E' || c == 'W')
 		return (1);
 	return (0);
+}
+
+double	get_player_direction(char c)
+{
+	if (c == 'N')
+		return (3 * PI / 2);
+	if (c == 'S')
+		return (PI / 2);
+	if (c == 'E')
+		return (0);
+	else
+		return (PI);
 }
 
 void	get_info(t_data *d, int i, int j)
 {
 	d->m->map_x = j;
 	d->m->map_y = i;
-	d->m->dir = d->m->map[i][j];
+	d->p->dir = get_player_direction(d->m->map[i][j]);
 }
 
 static void	ok_map(t_data *d)
@@ -171,14 +183,14 @@ static void	ok_map(t_data *d)
 		{
 			while (d->m->map[i][j] == ' ')
 				j++;
-			if (nseo(d->m->map[i][j]) && !pos)
+			if (nsew(d->m->map[i][j]) && !pos)
 			{
 				pos = true;
 				get_info(d, i, j);
 			}
 			else if (d->m->map[i][j] != '1' && d->m->map[i][j] != '0')
 				handle_error(d, "Unexpected symbol in map");
-			else if (nseo(d->m->map[i][j]) && pos)
+			else if (nsew(d->m->map[i][j]) && pos)
 				handle_error(d, "Multiple spawn in map");
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 19:13:44 by albrusso          #+#    #+#             */
-/*   Updated: 2024/03/15 19:55:45 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/04/15 17:33:28 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ size_t	ft_strlcpy(char *dest, const char *src, size_t n)
 	i = 0;
 	if (n == 0)
 		return (ft_strlen(src));
-	while ( src[i] != '\0' && i < n - 1)
+	while (src[i] != '\0' && i < n)
 	{
 		dest[i] = src[i];
 		i++;

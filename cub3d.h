@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:11:56 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/21 14:50:45 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/21 17:27:34 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,8 @@ typedef struct s_point
 
 typedef struct s_raycast
 {
-	double	distance;
-	double	angle;
-	t_point	h;
-	t_point	v;
-	bool	hit_wall;
+	double distance;
+	bool hit_vertical;
 }	t_raycast;
 
 typedef struct s_player
@@ -64,6 +61,7 @@ typedef struct s_player
 	int	x;
 	int	y;
 	double	angle;
+	double	dir;
 	float	fov;
 	bool	spin;
 	bool	lateral_move;
@@ -132,7 +130,6 @@ typedef struct s_img
 	int		len;
 	int		endian;
 }	t_img;
-
 
 typedef struct s_data
 {
@@ -207,6 +204,9 @@ int		cleanup(t_data *d);
 void	map(t_data *d, t_map *m, char *s);
 void	loop(t_data *d);
 
+t_raycast	raycasting(t_data *d, double angle);
+
+void	render(t_data *d);
 
 
 #endif

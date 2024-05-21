@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 17:43:18 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/21 14:20:38 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/21 17:02:17 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ void	loop(t_data *d)
 	load_img(d, d->ea, d->m->ea_tex);
 	d->i->ptr = mlx_new_image(d->mlx_ptr, WIN_X, WIN_Y);
 	d->i->data = (int *)mlx_get_data_addr(d->i->ptr, &d->i->bits, &d->i->len, &d->i->endian);
-	//background(d);
+	render(d);
 	mlx_hook(d->mlx_win, 2, 1L << 0, keypress, d);
-	mlx_loop_hook(d->mlx_ptr, background, d);
+	// mlx_loop_hook(d->mlx_ptr, background, d);
 	mlx_loop(d->mlx_ptr);
 }
