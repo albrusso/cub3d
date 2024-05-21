@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:15:21 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/20 17:33:53 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/21 14:08:30 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,10 +163,10 @@ static void	ok_map(t_data *d)
 	bool	pos;
 
 	i = -1;
+	pos = false;
 	while (d->m->map[++i])
 	{
 		j = -1;
-		pos = false;
 		while (d->m->map[i][++j])
 		{
 			while (d->m->map[i][j] == ' ')

@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 14:54:26 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/20 18:23:59 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/21 14:14:32 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void	free_raycast(t_data *d)
 
 static void	free_img(t_data *d, t_img	*i)
 {
-	if (i->file)
+	if (i->ptr)
 		mlx_destroy_image(d->mlx_ptr, i->ptr);
 	free(i);
 	i = NULL;
@@ -65,7 +65,7 @@ int	cleanup(t_data *d)
 	if (d->ea)
 		free_img(d, d->ea);
 	if (d->i)
-		mlx_destroy_image(d->mlx_ptr, d->i->ptr);
+		free_img(d, d->i);
 	if (d->mlx_win)
 		mlx_destroy_window(d->mlx_ptr, d->mlx_win);
 	if (d->mlx_ptr)

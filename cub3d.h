@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:11:56 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/20 18:16:57 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/21 14:50:45 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,18 @@
 # define TURN_LEFT  65361
 # define MAP_KEY    109
 
+typedef struct s_point
+{
+	float	x;
+	float	y;
+}	t_point;
+
 typedef struct s_raycast
 {
 	double	distance;
 	double	angle;
+	t_point	h;
+	t_point	v;
 	bool	hit_wall;
 }	t_raycast;
 
@@ -197,6 +205,7 @@ void	arrfree(char **a);
 int		cleanup(t_data *d);
 
 void	map(t_data *d, t_map *m, char *s);
+void	loop(t_data *d);
 
 
 

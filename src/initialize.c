@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 14:53:00 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/20 17:42:39 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/21 14:08:29 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,11 @@ void	initialize(t_data *d, char *s)
 	d->mlx_win = NULL;
 	d->p = ft_calloc(1, sizeof(t_player));
 	d->r = ft_calloc(1, sizeof(t_raycast));
+	d->no = ft_calloc(1, sizeof(t_img));
+	d->so = ft_calloc(1, sizeof(t_img));
+	d->we = ft_calloc(1, sizeof(t_img));
+	d->ea = ft_calloc(1, sizeof(t_img));
+	d->i = ft_calloc(1, sizeof(t_img));
 	initialize_map(d, s);
 	initialize_player(d);
 }

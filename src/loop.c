@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 17:43:18 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/20 18:20:32 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/21 14:20:38 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ int	background(void *_d)
 	int		y;
 
 	d = (t_data *)_d;
-	mlx_destroy_image(d->mlx_ptr, d->i->ptr);
-	d->i = mlx_new_image(d->mlx_ptr, WIN_X, WIN_Y);
 	y = -1;
 	while (++y < WIN_Y)
 	{
@@ -44,15 +42,17 @@ int	background(void *_d)
 		}
 	}
 	mlx_put_image_to_window(d->mlx_ptr, d->mlx_win, d->i->ptr, 0, 0);
+	return (0);
 }
 
-int	keypress(void *_d, int code)
+int	keypress(int code, void *_d)
 {
 	t_data	*d;
 
 	d = (t_data *)_d;
 	if (code == ESC)
 		cleanup(d);
+	return (0);
 }
 
 void	loop(t_data *d)
@@ -63,8 +63,10 @@ void	loop(t_data *d)
 	load_img(d, d->so, d->m->so_tex);
 	load_img(d, d->we, d->m->we_tex);
 	load_img(d, d->ea, d->m->ea_tex);
-	d->i = mlx_new_image(d->mlx_ptr, WIN_X, WIN_Y);
+	d->i->ptr = mlx_new_image(d->mlx_ptr, WIN_X, WIN_Y);
+	d->i->data = (int *)mlx_get_data_addr(d->i->ptr, &d->i->bits, &d->i->len, &d->i->endian);
+	//background(d);
 	mlx_hook(d->mlx_win, 2, 1L << 0, keypress, d);
 	mlx_loop_hook(d->mlx_ptr, background, d);
-
+	mlx_loop(d->mlx_ptr);
 }

@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 14:49:49 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/20 17:35:40 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/21 14:07:06 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	main(int argc, char *argv[])
 	t_data	d;
 
 	setup(&d, argc, argv);
-	//loop();
+	loop(&d);
 	cleanup(&d);
 	return (EXIT_SUCCESS);
 }
