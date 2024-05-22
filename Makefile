@@ -6,7 +6,7 @@
 #    By: albrusso <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/19 16:14:01 by albrusso          #+#    #+#              #
-#    Updated: 2024/05/21 16:59:40 by albrusso         ###   ########.fr        #
+#    Updated: 2024/05/22 14:52:02 by albrusso         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@
 
 NAME	=	cub3d
 CC		=	cc
-CFLAGS	=	-Wall -Wextra -Werror
+CFLAGS	=	-Wall -Wextra -Werror -g
 MLXFLAG	=	./minilibx-linux/libmlx.a -lX11 -lXext -lm
 MYLIB	=	./mylib/libftprintfgnl.a
 OBJ_DIR	=	.obj

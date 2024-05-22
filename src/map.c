@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:15:21 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/21 17:59:56 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/22 18:31:11 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,30 @@ int	finish(t_map *m)
 		|| !m->frgb || ! m->crgb)
 		return (0);
 	return (1);
+}
+
+static void	map_dimension(t_map *m, char **map)
+{
+	int	i;
+	int	curr;
+	int	prev;
+	int	len;
+
+	i = 0;
+	while (map[i])
+		i++;
+	m->max_y = i;
+	i = 0;
+	prev = (int)ft_strlen(map[i]);
+	len = prev;
+	while (map[++i])
+	{
+		curr = ft_strlen(m->map[i]);
+		if (prev < curr)
+			len = curr;
+		prev = curr;
+	}
+	m->max_x = len;
 }
 
 static void	add_tex(t_map *m, char **a)
@@ -194,6 +218,7 @@ static void	ok_map(t_data *d)
 				handle_error(d, "Multiple spawn in map");
 		}
 	}
+	map_dimension(d->m, d->m->map);
 	is_close(d);
 }
 

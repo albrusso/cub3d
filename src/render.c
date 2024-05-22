@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 16:35:00 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/21 17:51:14 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/22 18:32:00 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ static void	add_line_to_img(t_data *d, int i, int top, int bottom, int color)
 
 void	render(t_data *d)
 {
-	double	dist_plane;
 	double	fix_distance;
 	double	ray_angle;
 	int		height;
@@ -34,14 +33,13 @@ void	render(t_data *d)
 	int		i;
 	t_raycast ray;
 
-	dist_plane = (WIN_X / 2) / tan(deg_to_rad(FOV / 2));
 	i = -1;
+	ray_angle = d->p->dir - (d->p->fov / 2);
 	while (++i < WIN_X)
 	{
-		ray_angle = d->p->dir - deg_to_rad(FOV / 2) + (deg_to_rad(FOV) / WIN_X) * i;
-		ray = raycasting(d, ray_angle);
-		fix_distance = ray.distance * cos(ray_angle - d->p->dir);
-		height = (int)(TEXTURE_SIZE / fix_distance * dist_plane);
+		ray = raycasting(d, nor_angle(ray_angle));
+		fix_distance = ray.distance * cos(nor_angle(ray_angle - d->p->dir));
+		height = (int)((SIZE / fix_distance) * ((WIN_X / 2) / tan(d->p->fov / 2)));
 		top = (WIN_Y / 2) - (height / 2);
 		bottom = (WIN_Y / 2) + (height / 2);
 		if (top < 0)
@@ -51,7 +49,8 @@ void	render(t_data *d)
 		if (ray.hit_vertical)
 			color = (0 << 16  | 255 << 8 | 0);
 		else
-			color = (0 << 16 | 0 << 8 | 255);
+				color = (0 << 16 | 0 << 8 | 255);
 		add_line_to_img(d, i, top, bottom, color);
+		ray_angle += d->p->fov / WIN_X;
 	}
 }
