@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 17:43:18 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/22 18:30:07 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/22 19:10:23 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ int	background(void *_d)
 
 void	angle(int keypress, t_data *d)
 {
-	if (keypress == TURN_LEFT)
+	if (keypress == 123)
 		d->p->dir -= SPIN_SPEED;
-	if (keypress == TURN_RIGHT)
+	if (keypress == 124)
 		d->p->dir += SPIN_SPEED;
 }
 
@@ -153,7 +153,7 @@ int	keypress(int code, void *_d)
 	// if (code == UP || code == DOWN || \
 	// 	code == LEFT || code == RIGHT)
 	// 	check_move(d, code);
-	if (code == TURN_LEFT || code == TURN_RIGHT)
+	if (code == 123 || code == 124)
 		angle(code, d);
 	return (0);
 }

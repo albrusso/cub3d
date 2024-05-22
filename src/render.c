@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 16:35:00 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/22 18:32:00 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/22 19:43:28 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,19 @@ void	render(t_data *d)
 		if (bottom >= WIN_Y)
 			bottom = WIN_Y - 1;
 		if (ray.hit_vertical)
-			color = (0 << 16  | 255 << 8 | 0);
+		{
+			if (nor_angle(ray_angle) > PI / 2 && nor_angle(ray_angle) < 3 * PI / 2)
+				color = (0 << 16  | 255 << 8 | 0);
+			else
+				color = (0 << 16  | 0 << 8 | 0);
+		}
 		else
+		{
+			if (nor_angle(ray_angle) > PI)
 				color = (0 << 16 | 0 << 8 | 255);
+			else
+				color = (0 << 16 | 0 << 8 | 30);
+		}
 		add_line_to_img(d, i, top, bottom, color);
 		ray_angle += d->p->fov / WIN_X;
 	}

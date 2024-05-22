@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:11:56 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/22 17:55:44 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/22 19:02:41 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "mylib/libft/libft.h"
 # include "mylib/gnl/get_next_line.h"
 # include "mylib/ft_printf/ft_printf.h"
-# include "./minilibx-linux/mlx.h"
+# include "./minilibx/mlx.h"
 
 # include <stdbool.h>
 # include <math.h>

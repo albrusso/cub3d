@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:21:56 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/22 18:17:07 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/22 19:33:35 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,28 +54,7 @@ t_face	setup_face(double ray_angle)
 	return (f);
 }
 
-t_cast	setup_horizontal_cast(t_data *d, t_face f, double ray_angle)
-{
-	t_cast	c;
-
-	c.hit_wall.x = 0;
-	c.hit_wall.y = 0;
-	c.distance = INFINITY;
-	c.find_wall = false;
-	c.intercept.y = floor(d->p->pos.y / SIZE) * SIZE;
-	if (f.down)
-		c.intercept.y += SIZE;
-	c.intercept.x = d->p->pos.x + (c.intercept.y - d->p->pos.y) / tan(ray_angle);
-	c.step.y = SIZE;
-	if (f.up)
-		c.step.y *= -1;
-	c.step.x = SIZE / tan(ray_angle);
-	if ((f.left && c.step.x > 0) || (f.right && c.step.x < 0))
-		c.step.x *= -1;
-	return (c);
-}
-
-bool	wall_intercept(t_data *d, float x, float y)
+bool	wall_intercept(t_data *d, double x, double y)
 {
 	int	tmp_x;
 	int	tmp_y;
@@ -94,57 +73,46 @@ bool	wall_intercept(t_data *d, float x, float y)
 	return (true);
 }
 
-t_cast	horizontal_intercept(t_data *d, t_face f, double ray_angle)
+double	horizontal_intercept(t_data *d, t_face f, double ray_angle)
 {
 	t_cast	c;
+	int		pixel;
 
-	c = setup_horizontal_cast(d, f, ray_angle);
-	c.next = c.intercept;
-	while (wall_intercept(d, c.next.x, c.next.y))
+	c.step.y = SIZE;
+	c.step.x = SIZE / tan(ray_angle);
+	c.intercept.y = floor(d->p->pos.y / SIZE) * SIZE;
+	pixel = inter_check(ray_angle, &c.intercept.y, &c.step.y, 1);
+	c.intercept.x = d->p->pos.x + (c.intercept.y - d->p->pos.y) / tan(ray_angle);
+	if ((f.left && c.step.x > 0) || (f.right && c.step.x < 0))
+		c.step.x *= -1;
+	while (wall_intercept(d, c.intercept.x, c.intercept.y - pixel))
 	{
-		c.next.x += c.step.x;
-		c.next.y += c.step.y;
+		c.intercept.x += c.step.x;
+		c.intercept.y += c.step.y;
 	}
-	c.hit_wall = c.next;
-	c.find_wall = true;
-	return (c);
+	return (sqrt(pow(c.intercept.x - d->p->pos.x, 2) + \
+	pow(c.intercept.y - d->p->pos.y, 2)));
 }
 
-t_cast	setup_vertical_cast(t_data *d, t_face f, double ray_angle)
+double	vertical_intercept(t_data *d, t_face f, double ray_angle)
 {
 	t_cast	c;
+	int		pixel;
 
-	c.hit_wall.x = 0;
-	c.hit_wall.y = 0;
-	c.distance = INFINITY;
-	c.find_wall = false;
-	c.intercept.x = floor(d->p->pos.x / SIZE) * SIZE;
-	if (f.right)
-		c.intercept.x += SIZE;
-	c.intercept.y = d->p->pos.y + (c.intercept.x - d->p->pos.x) * tan(ray_angle);
 	c.step.x = SIZE;
-	if (f.left)
-		c.step.x *= -1;
 	c.step.y = SIZE * tan(ray_angle);
+	c.intercept.x = floor(d->p->pos.x / SIZE) * SIZE;
+	pixel = inter_check(ray_angle, &c.intercept.x, &c.step.x, 0);
+	c.intercept.y = d->p->pos.y + (c.intercept.x - d->p->pos.x) * tan(ray_angle);
 	if ((f.up && c.step.y > 0) || (f.down && c.step.y < 0))
 		c.step.y *= -1;
-	return (c);
-}
-
-t_cast	vertical_intercept(t_data *d, t_face f, double ray_angle)
-{
-	t_cast	c;
-
-	c = setup_vertical_cast(d, f, ray_angle);
-	c.next = c.intercept;
-	while (wall_intercept(d, c.next.x, c.next.y))
+	while (wall_intercept(d, c.intercept.x - pixel, c.intercept.y))
 	{
-		c.next.x += c.step.x;
-		c.next.y += c.step.y;
+		c.intercept.x += c.step.x;
+		c.intercept.y += c.step.y;
 	}
-	c.hit_wall = c.next;
-	c.find_wall = true;
-	return (c);
+	return (sqrt(pow(c.intercept.x - d->p->pos.x, 2) + \
+	pow(c.intercept.y - d->p->pos.y, 2)));
 }
 
 float	nor_angle(float angle)
@@ -159,25 +127,21 @@ float	nor_angle(float angle)
 t_raycast	raycasting(t_data *d, double ray_angle)
 {
 	t_raycast	ray;
-	t_cast		h;
-	t_cast		v;
+	double		h;
+	double		v;
 	t_face		f;
 
 	f = setup_face(ray_angle);
 	h = horizontal_intercept(d, f, ray_angle);
 	v = vertical_intercept(d, f, ray_angle);
-	if (h.find_wall)
-		h.distance = sqrt(pow(h.hit_wall.x - d->p->pos.x, 2) + pow(h.hit_wall.y - d->p->pos.y, 2));
-	if (v.find_wall)
-		v.distance = sqrt(pow(v.hit_wall.x - d->p->pos.x, 2) + pow(v.hit_wall.y - d->p->pos.y, 2));
-	if (v.distance < h.distance)
+	if (v < h)
 	{
-		ray.distance = v.distance;
+		ray.distance = v;
 		ray.hit_vertical = true;
 	}
 	else
 	{
-		ray.distance = h.distance;
+		ray.distance = h;
 		ray.hit_vertical = false;
 	}
 	return (ray);
