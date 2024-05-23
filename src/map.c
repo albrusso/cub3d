@@ -176,13 +176,13 @@ int	nsew(char c)
 double	get_player_direction(char c)
 {
 	if (c == 'N')
-		return (3 * PI / 2);
+		return ((3 * PI / 2) + 0.005);
 	if (c == 'S')
-		return (PI / 2);
+		return ((PI / 2) + 0.005);
 	if (c == 'E')
-		return (0);
+		return (0 + 0.005);
 	else
-		return (PI);
+		return (PI + 0.005);
 }
 
 void	get_info(t_data *d, int i, int j)

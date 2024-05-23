@@ -12,18 +12,6 @@
 
 #include "../cub3d.h"
 
-double	find_angle(t_data *d)
-{
-	if (d->m->dir == 'N')
-		return(3 * PI / 2);
-	else if (d->m->dir == 'S')
-		return (PI / 2);
-	else if (d->m->dir == 'E')
-		return (0);
-	else
-		return (PI);
-}
-
 static void	initialize_player(t_data *d)
 {
 	d->p->pos.x = d->m->map_x * SIZE + SIZE / 2;
