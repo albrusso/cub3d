@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 17:43:18 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/22 19:10:23 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/23 18:01:56 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ static void	load_img(t_data *d, t_img *img, char *s)
 	img->ptr = mlx_xpm_file_to_image(d->mlx_ptr, s, &img->w, &img->h);
 	if (!img->ptr)
 		handle_error(d, "Texture file not found");
-	img->file = mlx_get_data_addr(img->ptr, &img->bits,
+	img->data = (int *)mlx_get_data_addr(img->ptr, &img->bits,
 			&img->len, &img->endian);
-	if (!img->file)
+	if (!img->data)
 		handle_error(d, "Failed mlx_get_data_addr()");
 }
 
