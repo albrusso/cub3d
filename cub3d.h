@@ -16,7 +16,7 @@
 # include "mylib/libft/libft.h"
 # include "mylib/gnl/get_next_line.h"
 # include "mylib/ft_printf/ft_printf.h"
-# include "./minilibx/mlx.h"
+# include "./minilibx-linux/mlx.h"
 
 # include <stdbool.h>
 # include <math.h>

@@ -48,22 +48,20 @@ int	background(void *_d)
 
 void	angle(int keypress, t_data *d)
 {
-	if (keypress == 123)
+	if (keypress == TURN_LEFT)
 		d->p->dir -= SPIN_SPEED;
-	if (keypress == 124)
+	if (keypress == TURN_RIGHT)
 		d->p->dir += SPIN_SPEED;
 }
 
-// int	check_wall_up(t_player *player, char **map)
-// {
-// 	double	safe;
-
-// 	safe = 0.1;
-// 	if (map[(int)(player->y + player->move_y * (0.1 + safe))]
-// 		[(int)(player->x + player->move_x * (0.1 + safe))] == '1')
-// 		return (0);
-// 	return (1);
-// }
+ int	check_wall_up(t_player *player, char **map)
+ {
+ 	int x2 = roundf(player->pos.x);
+ 	int y2 = roundf(player->pos.y);
+ 	if (map[(int)(y2 + 0.01)][(int)(x2 + 0.01 )] == '1')
+ 		return (0);
+ 	return (1);
+ }
 
 // int	check_wall_down(t_player *player, char **map)
 // {
@@ -98,50 +96,78 @@ void	angle(int keypress, t_data *d)
 // 	return (1);
 // }
 
-// void	check_move_u(t_player *player, int keypress, char **map)
-// {
-// 	if (keypress == UP && check_wall_up(player, map))
-// 	{
-// 		player->y += player->move_y * 0.1;
-// 		player->x += player->move_x * 0.1;
-// 	}
-// }
+ void	check_move_u(t_player *player, t_data *d)
+ {
+ 	double new_x = cos(player->dir) * 4;
+	double new_y = sin(player->dir) * 4;
 
-// void	check_move_d(t_player *player, int keypress, char **map)
-// {
-// 	if (keypress == DOWN && check_wall_down(player, map))
-// 	{
-// 		player->y -= player->move_y * 0.1;
-// 		player->x -= player->move_x * 0.1;
-// 	}
-// }
+	double new_x2;
+	double new_y2;
+	int  map_grid_y;
+	int  map_grid_x;
+	//int  new_x2;
+	//int  new_y2;
+	new_x2 = roundf(player->pos.x + player->next.x); // get the new x position
+	new_y2 = roundf(player->pos.y+ player->next.y); // get the new y position
+	map_grid_x = (new_x2 / SIZE); // get the x position in the map
+	map_grid_y = (new_y2 / SIZE); // get the y position in the map
+	if (d->m->map[map_grid_y][map_grid_x] != '1' && \
+	(d->m->map[map_grid_y][(int)d->p->pos.x / SIZE] != '1' && \
+	d->m->map[(int)d->p->pos.y / SIZE][map_grid_x] != '1')) // check the wall hit and the diagonal wall hit
+	{
+		player->pos.x += new_x;
+		player->pos.y += new_y;
+	}
+}
 
-// void	check_move_r(t_player *player, int keypress, char **map)
-// {
-// 	if (keypress == RIGHT && check_wall_right(player, map))
-// 	{
-// 		player->y += player->move_y * 0.1;
-// 		player->x -= player->move_x * 0.1;
-// 	}
-// }
+ void	check_move_d(t_player *player)
+ {
+ 	double new_x = cos(player->dir) * 4;
+	double new_y = sin(player->dir) * 4;
+	//if (!has_collision)
+	{
+		player->pos.x -= new_x;
+		player->pos.y -= new_y;
 
-// void	check_move_l(t_player *player, int keypress, char **map)
-// {
-// 	if (keypress == LEFT && check_wall_left(player, map))
-// 	{
-// 		player->move_x = sin(player->dir) * PLAYER_SPEED;
-// 		player->move_y = -cos(player->dir) * PLAYER_SPEED;
-// 	}
-// }
+	}
+ }
 
-// void	check_move(t_data *d, int keypress)
-// {
-	// check_move_u(d->p, keypress, d->m->map);
-	// check_move_d(d->p, keypress, d->m->map);
-	// check_move_r(d->p, keypress, d->m->map);
-	// check_move_l(d->p, keypress, d->m->map);
-// 	return ;
-// }
+ void	check_move_r(t_player *player)
+ {
+	double new_x = cos(player->dir) * 4;
+	double new_y = sin(player->dir) * 4;
+	//if (!has_collision)
+	{
+		player->pos.x -= new_y;
+		player->pos.y += new_x;
+
+	}
+ }
+
+ void	check_move_l(t_player *player)
+ {
+ 	double new_x = cos(player->dir) * 4;
+	double new_y = sin(player->dir) * 4;
+	//if (!has_collision)
+	{
+		player->pos.x += new_y;
+		player->pos.y -= new_x;
+
+	}
+ }
+
+ void	check_move(t_data *d, int keypress)
+ {
+	if (keypress == UP)
+	 	check_move_u(d->p, d);
+	if (keypress == DOWN)	 
+		check_move_d(d->p);
+	if (keypress == RIGHT)
+		check_move_r(d->p);
+	if (keypress == LEFT)
+		check_move_l(d->p);
+ 	return ;
+ }
 
 int	keypress(int code, void *_d)
 {
@@ -150,10 +176,10 @@ int	keypress(int code, void *_d)
 	d = (t_data *)_d;
 	if (code == ESC)
 		cleanup(d);
-	// if (code == UP || code == DOWN || \
-	// 	code == LEFT || code == RIGHT)
-	// 	check_move(d, code);
-	if (code == 123 || code == 124)
+	 if (code == UP || code == DOWN || \
+	 	code == LEFT || code == RIGHT)
+	 	check_move(d, code);
+	if (code == TURN_RIGHT || code == TURN_LEFT)
 		angle(code, d);
 	return (0);
 }
