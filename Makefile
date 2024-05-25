@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: albrusso <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/03/19 16:14:01 by albrusso          #+#    #+#              #
-#    Updated: 2024/05/22 14:52:02 by albrusso         ###   ########.fr        #
+#    Created: 2024/04/19 19:08:41 by albrusso          #+#    #+#              #
+#    Updated: 2024/05/24 21:34:29 by albrusso         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,8 +17,8 @@
 NAME	=	cub3d
 CC		=	cc
 CFLAGS	=	-Wall -Wextra -Werror -g
-MLXFLAG	=	./minilibx-linux/libmlx.a -lX11 -lXext -lm
 MYLIB	=	./mylib/libftprintfgnl.a
+MLXFLAGS	=	-L ./minilibx/ -lmlx -framework OpenGL -framework AppKit -lz
 OBJ_DIR	=	.obj
 SIZE	=	40
 
@@ -41,12 +41,11 @@ SRC		=	src/main.c \
 			src/cleanup.c \
 			src/handler.c \
 			src/initialize.c \
-			src/map.c \
-			src/setup.c \
 			src/loop.c \
+			src/map.c \
 			src/raycasting.c \
-			src/render.c
-
+			src/render.c \
+			src/setup.c
 
 OBJ		=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
@@ -54,10 +53,14 @@ OBJ		=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 #                                   MAKE                                       #
 ################################################################################
 
+ifeq ($(shell uname), Linux)
+MLXFLAGS	=	minilibx/libmlx.a -lX11 -lXext -lm
+endif
+
 all:	$(NAME)
 $(NAME): $(OBJ)
 	@make -sC mylib
-	@$(CC) $(CFLAGS) -lreadline $(OBJ) -o $(NAME) $(MYLIB) $(MLXFLAG)
+	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(MYLIB) $(MLXFLAGS)
 
 $(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
 	@printf "$(WHITE)%s$(BLUE)%-$(SIZE)s$(GREEN)%s$(DEFAULT)\n" "Compiling... " "$<" "[OK]"
@@ -65,8 +68,8 @@ $(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
 
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)/src
-	@mkdir -p $(OBJ_DIR)/src/texture
-	@mkdir -p $(OBJ_DIR)/src/map
+	@mkdir -p $(OBJ_DIR)/src/utils
+	@mkdir -p $(OBJ_DIR)/src/parser
 
 clean:
 	@make clean -sC mylib
@@ -88,6 +91,6 @@ run: $(NAME)
 	./$(NAME)
 
 mem: $(NAME)
-		valgrind --leak-check=full --show-leak-kinds=all ./$(NAME) map.cub
+		valgrind --leak-check=full --show-leak-kinds=all ./$(NAME)
 
 .PHONY: all clean fclean re run mem

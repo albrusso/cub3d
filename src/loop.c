@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 17:43:18 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/23 18:01:56 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/25 18:01:10 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	background(void *_d)
 				d->i->data[y * WIN_X + x] = d->m->crgb;
 		}
 	}
-	render(d);
+	cast_rays(d);
 	mlx_put_image_to_window(d->mlx_ptr, d->mlx_win, d->i->ptr, 0, 0);
 	return (0);
 }
@@ -163,6 +163,27 @@ int	keypress(int code, void *_d)
 	return (0);
 }
 
+void	get_angle(t_data *d)
+{
+	char	c;
+
+	c = d->m->map[d->m->map_y][d->m->map_x];
+	printf("%c\n", c);
+	if (c == 'N')
+		d->p->dir = 3 * M_PI / 2;
+	if (c == 'S')
+		d->p->dir = M_PI / 2;
+	if (c == 'E')
+		d->p->dir = 0;
+	if (c == 'W')
+		d->p->dir = M_PI;
+	d->p->pos.x = (d->m->map_x * SIZE) + SIZE / 2;
+	d->p->pos.y = (d->m->map_y * SIZE) + SIZE / 2;
+	printf("%f\n", d->p->pos.x);
+	printf("%f\n", d->p->pos.y);
+	d->p->fov = (FOV * M_PI / 180);
+}
+
 void	loop(t_data *d)
 {
 	d->mlx_ptr = mlx_init();
@@ -173,6 +194,7 @@ void	loop(t_data *d)
 	load_img(d, d->ea, d->m->ea_tex);
 	d->i->ptr = mlx_new_image(d->mlx_ptr, WIN_X, WIN_Y);
 	d->i->data = (int *)mlx_get_data_addr(d->i->ptr, &d->i->bits, &d->i->len, &d->i->endian);
+	get_angle(d);
 	mlx_hook(d->mlx_win, 17, 0, cleanup, d);
 	mlx_hook(d->mlx_win, 2, 1L << 0, keypress, d);
 	mlx_loop_hook(d->mlx_ptr, background, d);

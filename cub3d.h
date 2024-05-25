@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:11:56 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/22 19:02:41 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/25 18:06:42 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "mylib/libft/libft.h"
 # include "mylib/gnl/get_next_line.h"
 # include "mylib/ft_printf/ft_printf.h"
-# include "./minilibx-linux/mlx.h"
+# include "./minilibx/mlx.h"
 
 # include <stdbool.h>
 # include <math.h>
@@ -30,18 +30,18 @@
 
 # define WIN_X          1200
 # define WIN_Y          800
-# define SIZE   32
-# define FOV            60
+# define SIZE   64
+# define FOV           60
 # define SPIN_SPEED     0.045
-# define PLAYER_SPEED   0.01
+# define PLAYER_SPEED   0.1
 
-# define ESC    65307
-# define UP     119
-# define DOWN   115
-# define LEFT   97
-# define RIGHT  100
-# define TURN_RIGHT 65363
-# define TURN_LEFT  65361
+# define ESC    53
+# define UP     13
+# define DOWN   1
+# define LEFT   0
+# define RIGHT  2
+# define TURN_RIGHT 124
+# define TURN_LEFT  123
 # define MAP_KEY    109
 
 typedef struct s_point
@@ -52,14 +52,22 @@ typedef struct s_point
 
 typedef struct s_raycast
 {
-	double distance;
-	bool hit_vertical;
+	double	distance;
+	double	ray_angle;
+	double	horiz_x;
+	double	horiz_y;
+	double	vert_x;
+	double	vert_y;
+	int		index;
+	bool	flag;
 }	t_raycast;
 
 typedef struct s_player
 {
 	t_point	pos;
 	t_point	next;
+	int		x;
+	int		y;
 	double	fov;
 	double	dir;
 }	t_player;
@@ -136,10 +144,15 @@ int		cleanup(t_data *d);
 void	map(t_data *d, t_map *m, char *s);
 void	loop(t_data *d);
 
-t_raycast	raycasting(t_data *d, double ray_angle);
+t_raycast	raycast(t_data *d, double angle);
+
+
 
 void	render(t_data *d);
 
 float	nor_angle(float angle);
+
+void	cast_rays(t_data *d);
+
 
 #endif

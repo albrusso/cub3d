@@ -6,68 +6,102 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 16:35:00 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/23 18:12:49 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/25 18:00:52 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-double deg_to_rad(double degrees) {
-    return degrees * (PI / 180.0);
-}
+// t_img	*get_texture(t_data *d, t_raycast ray)
+// {
+// 	ray.ray_angle = nor_angle(ray.ray_angle);
+// 	if (!ray.flag)
+// 	{
+// 		if (ray.ray_angle > M_PI / 2 && ray.ray_angle < 3 * (M_PI / 2))
+// 			return (d->ea);
+// 		else
+// 			return (d->we);
+// 	}
+// 	else
+// 	{
+// 		if (ray.ray_angle > 0 && ray.ray_angle < M_PI)
+// 			return (d->so);
+// 		else
+// 			return (d->no);
+// 	}
+// }
 
-static void	add_line_to_img(t_data *d, int i, int top, int bottom, t_img *t)
-{
-	int	color;
+// void	add_pixel(t_data *d, int x, int y, int color)
+// {
+// 	if (x < 0)
+// 		return ;
+// 	else if (x >= WIN_X)
+// 		return ;
+// 	if (y < 0)
+// 		return ;
+// 	else if (y >= WIN_Y)
+// 		return ;
+// 	d->i->data[y * WIN_X + x] = color;
+// }
 
-	color = t->data[5];
-	for (int y = top; y < bottom; y++)
-		d->i->data[y * WIN_X + i] = color;
-}
+// double	get_x_o(t_img	*texture, t_raycast ray)
+// {
+// 	double	x_o;
 
-t_img	*find_texture(t_data *d, t_raycast r, double angle)
-{
-	if (r.hit_vertical)
-	{
-		if (nor_angle(angle) > PI / 2 && nor_angle(angle) < 3 * PI / 2)
-			return (d->ea);
-		else
-			return (d->we);
-	}
-	else
-	{
-		if (nor_angle(angle) > PI)
-			return (d->so);
-		else
-			return (d->no);
-	}
-}
+// 	if (ray.flag)
+// 		x_o = (int)fmodf((ray.horiz_x * (texture->w / SIZE)), texture->w);
+// 	else
+// 		x_o = (int)fmodf((ray.vert_y * (texture->w / SIZE)), texture->w);
+// 	return (x_o);
+// }
 
-void	render(t_data *d)
-{
-	double	ray_angle;
-	int		height;
-	int		top;
-	int		bottom;
-	t_img	*t;
-	int		i;
-	t_raycast r;
+// void	draw_vertical_line(t_data *d, t_raycast ray, double top, double bottom, double wall_h, int x)
+// {
+// 	double			x_o;
+// 	double			y_o;
+// 	t_img			*texture;
+// 	uint32_t		*arr;
+// 	double			factor;
 
-	i = -1;
-	ray_angle = d->p->dir - (d->p->fov / 2);
-	while (++i < WIN_X)
-	{
-		r = raycasting(d, nor_angle(ray_angle));
-		r.distance *= cos(nor_angle(ray_angle - d->p->dir));
-		height = (int)((SIZE / r.distance) * ((WIN_X / 2) / tan(d->p->fov / 2)));
-		top = (WIN_Y / 2) - (height / 2);
-		bottom = (WIN_Y / 2) + (height / 2);
-		if (top < 0)
-			top = 0;
-		if (bottom >= WIN_Y)
-			bottom = WIN_Y;
-		t = find_texture(d, r, ray_angle);
-		add_line_to_img(d, i, top, bottom, t);
-		ray_angle += d->p->fov / WIN_X;
-	}
-}
+// 	texture = get_texture(d, ray);
+// 	arr = (uint32_t *)texture->data;
+// 	factor = (double)texture->h / wall_h;
+// 	x_o = get_x_o(texture, ray);
+// 	y_o = (top - (WIN_Y / 2) + (wall_h / 2)) * factor;
+// 	if (y_o < 0)
+// 		y_o = 0;
+// 	while (top < bottom)
+// 	{
+// 		add_pixel(d, x, top, arr[(int)y_o * texture->w + (int)x_o]);
+// 		y_o += factor;
+// 		top++;
+// 	}
+// }
+
+// void	render(t_data *d)
+// {
+// 	int			x;
+// 	double		angle;
+// 	double		wall_h;
+// 	double		top;
+// 	double		bottom;
+// 	t_raycast	ray;
+
+// 	x = -1;
+// 	angle = d->p->dir - (d->p->fov / 2);
+// 	while (++x < WIN_X)
+// 	{
+// 		ray = raycast(d, angle);
+// 		ray.distance *= cos(nor_angle(ray.ray_angle - d->p->dir));
+// 		wall_h = (SIZE / ray.distance) * ((WIN_X / 2) / tan(d->p->fov / 2));
+// 		bottom = (WIN_Y / 2) + (wall_h / 2);
+// 		top = (WIN_Y / 2) - (wall_h / 2);
+// 		if (bottom > WIN_Y)
+// 			bottom = WIN_Y;
+// 		if (top < 0)
+// 			top = 0;
+// 		draw_vertical_line(d, ray, top, bottom, wall_h, x);
+// 		angle += (d->p->fov / WIN_X);
+// 	}
+	
+// }

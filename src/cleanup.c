@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 14:54:26 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/21 14:14:32 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/25 13:26:04 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,8 @@ int	cleanup(t_data *d)
 		free_img(d, d->i);
 	if (d->mlx_win)
 		mlx_destroy_window(d->mlx_ptr, d->mlx_win);
-	if (d->mlx_ptr)
-		mlx_destroy_display(d->mlx_ptr);
+	// if (d->mlx_ptr)
+	// 	mlx_destroy_display(d->mlx_ptr);
 	free(d->mlx_ptr);
 	exit(EXIT_SUCCESS);
 	return (1);

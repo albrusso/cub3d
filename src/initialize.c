@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 14:53:00 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/22 17:18:30 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/25 17:11:32 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static void	initialize_player(t_data *d)
 {
-	d->p->pos.x = d->m->map_x * SIZE + SIZE / 2;
-	d->p->pos.y = d->m->map_y * SIZE + SIZE / 2;
+	d->p->x = d->m->map_x * SIZE + SIZE / 2;
+	d->p->y = d->m->map_y * SIZE + SIZE / 2;
 	d->p->fov = (FOV * PI) / 180;
 }
 
