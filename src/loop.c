@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 17:43:18 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/25 18:01:10 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/26 13:11:26 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,6 @@ void	get_angle(t_data *d)
 	char	c;
 
 	c = d->m->map[d->m->map_y][d->m->map_x];
-	printf("%c\n", c);
 	if (c == 'N')
 		d->p->dir = 3 * M_PI / 2;
 	if (c == 'S')
@@ -179,8 +178,6 @@ void	get_angle(t_data *d)
 		d->p->dir = M_PI;
 	d->p->pos.x = (d->m->map_x * SIZE) + SIZE / 2;
 	d->p->pos.y = (d->m->map_y * SIZE) + SIZE / 2;
-	printf("%f\n", d->p->pos.x);
-	printf("%f\n", d->p->pos.y);
 	d->p->fov = (FOV * M_PI / 180);
 }
 

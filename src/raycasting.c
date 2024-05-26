@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:21:56 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/25 18:00:41 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/26 13:00:27 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,11 +180,9 @@ void	draw_wall(t_data *d, int t_pix, int b_pix, double wall_h)
 	double			x_o;
 	double			y_o;
 	t_img			*texture;
-	uint32_t		*arr;
 	double			factor;
 
 	texture = get_texture(d, d->r->flag);
-	arr = (uint32_t *)texture->data;
 	factor = (double)texture->h / wall_h;
 	x_o = get_x_o(texture, d);
 	y_o = (t_pix - (WIN_Y / 2) + (wall_h / 2)) * factor;
@@ -192,7 +190,7 @@ void	draw_wall(t_data *d, int t_pix, int b_pix, double wall_h)
 		y_o = 0;
 	while (t_pix < b_pix)
 	{
-		add_pixel(d, d->r->index, t_pix, arr[(int)y_o * texture->w + (int)x_o]);
+		add_pixel(d, d->r->index, t_pix, texture->data[(int)y_o * texture->w + (int)x_o]);
 		y_o += factor;
 		t_pix++;
 	}

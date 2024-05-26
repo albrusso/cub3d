@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 14:54:26 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/25 13:26:04 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/26 13:10:24 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ static void	free_map(t_data *d)
 
 static void	free_player(t_data *d)
 {
-	free(d->p);
+	if (d->p)
+		free(d->p);
 	d->p = NULL;
 }
 
@@ -70,7 +71,7 @@ int	cleanup(t_data *d)
 		mlx_destroy_window(d->mlx_ptr, d->mlx_win);
 	// if (d->mlx_ptr)
 	// 	mlx_destroy_display(d->mlx_ptr);
-	free(d->mlx_ptr);
+	//free(d->mlx_ptr);
 	exit(EXIT_SUCCESS);
 	return (1);
 }

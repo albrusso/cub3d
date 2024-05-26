@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 14:54:04 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/20 16:10:13 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/26 13:05:18 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,5 @@
 void	handle_error(t_data *d, char *s)
 {
 	printf("Error: %s\n", s);
-	if (d)
-		cleanup(d);
+	cleanup(d);
 }
