@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:15:21 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/22 18:31:11 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/27 00:46:14 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,17 @@ static void	add_tex(t_map *m, char **a)
 	free(s);
 }
 
-static void	add_rgb(t_map *m, char **a)
+static void	add_rgb(t_data *d, t_map *m, char **a)
 {
 	char	**tmp;
+	int		rgb[3];
 
 	tmp = ft_split(a[1], ',');
+	rgb[0] = ft_atoi(tmp[0]);
+	rgb[1] = ft_atoi(tmp[1]);
+	rgb[2] = ft_atoi(tmp[2]);
+	if ((rgb[0] < 0 || rgb[0] > 255) || (rgb[1] < 0 || rgb[1] > 255) || (rgb[2] < 0 || rgb[2] > 255))
+		handle_error(d, "rgb must be in range 0-255");
 	if (!ft_strncmp("F", a[0], 1))
 		m->frgb = (ft_atoi(tmp[0]) << 16 | ft_atoi(tmp[1]) << 8 | ft_atoi(tmp[2]));
 	else if (!ft_strncmp("C", a[0], 1))
@@ -73,13 +79,13 @@ static void	add_rgb(t_map *m, char **a)
 	arrfree(tmp);
 }
 
-int	ok_line(t_map *m, char **a)
+int	ok_line(t_data *d, t_map *m, char **a)
 {
 	if (!ft_strncmp("NO", a[0], 2) || !ft_strncmp("SO", a[0], 2)
 		|| !ft_strncmp("WE", a[0], 2) || !ft_strncmp("EA", a[0], 2))
 		return (add_tex(m, a), 1);
 	else if (!ft_strncmp("F", a[0], 1) || !ft_strncmp("C", a[0], 1))
-		return (add_rgb(m, a), 1);
+		return (add_rgb(d, m, a), 1);
 	else
 		return (0);
 }
@@ -97,7 +103,7 @@ void	texture(t_data *d, t_map *m, int fd)
 		else
 		{
 			tmp = ft_split(s, ' ');
-			if (!ok_line(m, tmp))
+			if (!ok_line(d, m, tmp))
 			{
 				free(s);
 				arrfree(tmp);
@@ -139,6 +145,29 @@ static void	map2d(t_data *d, t_map *m, int fd)
 	free(buffer);
 }
 
+static void	check_top_down(t_data *d, char *s, int i, int j)
+{
+	if (i == 0 || i == d->m->max_y - 1)
+	{
+		while (s[++j])
+			if (s[j] != '1')
+				handle_error(d, "Map must be closed");
+	}
+}
+
+static void	check_left_right(t_data *d, char *s, int j)
+{
+	if (j == 0 || j == (int)ft_strlen(s))
+		if (s[j] != '1')
+			handle_error(d, "Map must be closed");
+}
+
+static void	skip_space(char *s, int *j)
+{
+	while (s[*j] && s[*j] == ' ')
+		*j += 1;
+}
+
 static void	is_close(t_data *d)
 {
 	int	i;
@@ -150,6 +179,9 @@ static void	is_close(t_data *d)
 		j = -1;
 		while (d->m->map[i][++j])
 		{
+			skip_space(d->m->map[i], &j);
+			check_top_down(d, d->m->map[i], i, j);
+			check_left_right(d, d->m->map[i], j);
 			if (d->m->map[i][j] == '0')
 			{
 				if (!d->m->map[i][j + 1] || d->m->map[i][j + 1] == ' ')
@@ -212,10 +244,10 @@ static void	ok_map(t_data *d)
 				pos = true;
 				get_info(d, i, j);
 			}
-			else if (d->m->map[i][j] != '1' && d->m->map[i][j] != '0')
-				handle_error(d, "Unexpected symbol in map");
 			else if (nsew(d->m->map[i][j]) && pos)
 				handle_error(d, "Multiple spawn in map");
+			else if (d->m->map[i][j] != '1' && d->m->map[i][j] != '0')
+				handle_error(d, "Unexpected symbol in map");
 		}
 	}
 	map_dimension(d->m, d->m->map);

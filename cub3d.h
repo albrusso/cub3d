@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:11:56 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/25 18:06:42 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/27 00:41:06 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 # define SIZE   64
 # define FOV           60
 # define SPIN_SPEED     0.045
-# define PLAYER_SPEED   0.1
+# define PLAYER_SPEED   0.5
 
 # define ESC    53
 # define UP     13
@@ -52,13 +52,13 @@ typedef struct s_point
 
 typedef struct s_raycast
 {
-	double	distance;
+	double	dist;
 	double	ray_angle;
-	double	horiz_x;
-	double	horiz_y;
-	double	vert_x;
-	double	vert_y;
-	int		index;
+	double	h_inter_x;
+	double	h_inter_y;
+	double	v_inter_x;
+	double	v_inter_y;
+	int		x;
 	bool	flag;
 }	t_raycast;
 
@@ -144,15 +144,13 @@ int		cleanup(t_data *d);
 void	map(t_data *d, t_map *m, char *s);
 void	loop(t_data *d);
 
-t_raycast	raycast(t_data *d, double angle);
+void	raycast(t_data *d);
 
 
-
-void	render(t_data *d);
-
-float	nor_angle(float angle);
+float	norm_angle(float angle);
 
 void	cast_rays(t_data *d);
 
+void	render(t_data *d, int x);
 
 #endif

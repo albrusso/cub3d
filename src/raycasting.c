@@ -6,41 +6,41 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:21:56 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/26 13:00:27 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/27 00:40:29 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-float	nor_angle(float angle)
+float	norm_angle(float angle)
 {
 	if (angle < 0)
-		angle += (2 * M_PI);
-	if (angle > (2 * M_PI))
-		angle -= (2 * M_PI);
+		angle += (2 * PI);
+	if (angle > (2 * PI))
+		angle -= (2 * PI);
 	return (angle);
 }
 
-int	unit_circle(float angle, char c)
+int	in_range(float angle, char c)
 {
 	if (c == 'x')
 	{
-		if (angle > 0 && angle < M_PI)
+		if (angle > 0 && angle < PI)
 			return (1);
 	}
 	else if (c == 'y')
 	{
-		if (angle > (M_PI / 2) && angle < (3 * M_PI) / 2)
+		if (angle > (PI / 2) && angle < (3 * PI) / 2)
 			return (1);
 	}
 	return (0);
 }
 
-int	inter_check(float angle, float *inter, float *step, int is_horizon)
+int	inter_check(float angle, float *inter, float *step, char c)
 {
-	if (is_horizon)
+	if (c == 'h')
 	{
-		if (angle > 0 && angle < M_PI)
+		if (angle > 0 && angle < PI)
 		{
 			*inter += SIZE;
 			return (-1);
@@ -49,7 +49,7 @@ int	inter_check(float angle, float *inter, float *step, int is_horizon)
 	}
 	else
 	{
-		if (!(angle > M_PI / 2 && angle < 3 * M_PI / 2))
+		if (!(angle > PI / 2 && angle < 3 * PI / 2))
 		{
 			*inter += SIZE;
 			return (-1);
@@ -59,163 +59,77 @@ int	inter_check(float angle, float *inter, float *step, int is_horizon)
 	return (1);
 }
 
-int	wall_hit(float x, float y, t_data *d)
+int	find_wall(float x, float y, t_data *d)
 {
-	int		x_m;
-	int		y_m;
+	int		map_x;
+	int		map_y;
 
 	if (x < 0 || y < 0)
-		return (0);
-	x_m = floor (x / SIZE);
-	y_m = floor (y / SIZE);
-	if ((y_m >= d->m->max_y || x_m >= d->m->max_x))
-		return (0);
-	if (d->m->map[y_m] && x_m <= (int)ft_strlen(d->m->map[y_m]))
-		if (d->m->map[y_m][x_m] == '1')
-			return (0);
-	return (1);
+		return (true);
+	map_x = floor(x / SIZE);
+	map_y = floor(y / SIZE);
+	if ((map_y >= d->m->max_y || map_x >= d->m->max_x))
+		return (true);
+	if (d->m->map[map_y] && map_x <= (int)ft_strlen(d->m->map[map_y]))
+		if (d->m->map[map_y][map_x] == '1')
+			return (true);
+	return (false);
 }
 
 float	get_h_inter(t_data *d, float angl)
 {
-	float	h_x;
-	float	h_y;
-	float	x_step;
-	float	y_step;
+	float	x;
+	float	y;
+	float	step_x;
+	float	step_y;
 	int		pixel;
 
-	y_step = SIZE;
-	x_step = SIZE / tan(angl);
-	h_y = floor(d->p->pos.y / SIZE) * SIZE;
-	pixel = inter_check(angl, &h_y, &y_step, 1);
-	h_x = d->p->pos.x + (h_y - d->p->pos.y) / tan(angl);
-	if ((unit_circle(angl, 'y') && x_step > 0) || \
-		(!unit_circle(angl, 'y') && x_step < 0))
-		x_step *= -1;
-	while (wall_hit(h_x, h_y - pixel, d))
+	step_y = SIZE;
+	step_x = SIZE / tan(angl);
+	y = floor(d->p->pos.y / SIZE) * SIZE;
+	pixel = inter_check(angl, &y, &step_y, 'h');
+	x = d->p->pos.x + (y - d->p->pos.y) / tan(angl);
+	if ((in_range(angl, 'y') && step_x > 0) || \
+		(!in_range(angl, 'y') && step_x < 0))
+		step_x *= -1;
+	while (!find_wall(x, y - pixel, d))
 	{
-		h_x += x_step;
-		h_y += y_step;
+		x += step_x;
+		y += step_y;
 	}
-	d->r->horiz_x = h_x;
-	d->r->horiz_y = h_y;
-	return (sqrt(pow(h_x - d->p->pos.x, 2) + \
-	pow(h_y - d->p->pos.y, 2)));
+	d->r->h_inter_x = x;
+	d->r->h_inter_y = y;
+	return (sqrt(pow(x - d->p->pos.x, 2) + pow(y - d->p->pos.y, 2)));
 }
 
 float	get_v_inter(t_data *d, float angl)
 {
-	float	v_x;
-	float	v_y;
-	float	x_step;
-	float	y_step;
+	float	x;
+	float	y;
+	float	step_x;
+	float	step_y;
 	int		pixel;
 
-	x_step = SIZE;
-	y_step = SIZE * tan(angl);
-	v_x = floor(d->p->pos.x / SIZE) * SIZE;
-	pixel = inter_check(angl, &v_x, &x_step, 0);
-	v_y = d->p->pos.y + (v_x - d->p->pos.x) * tan(angl);
-	if ((unit_circle(angl, 'x') && y_step < 0) || \
-	(!unit_circle(angl, 'x') && y_step > 0))
-		y_step *= -1;
-	while (wall_hit(v_x - pixel, v_y, d))
+	step_x = SIZE;
+	step_y = SIZE * tan(angl);
+	x = floor(d->p->pos.x / SIZE) * SIZE;
+	pixel = inter_check(angl, &x, &step_x, 'v');
+	y = d->p->pos.y + (x - d->p->pos.x) * tan(angl);
+	if ((in_range(angl, 'x') && step_y < 0) || \
+	(!in_range(angl, 'x') && step_y > 0))
+		step_y *= -1;
+	while (!find_wall(x - pixel, y, d))
 	{
-		v_x += x_step;
-		v_y += y_step;
+		x += step_x;
+		y += step_y;
 	}
-	d->r->vert_x = v_x;
-	d->r->vert_y = v_y;
-	return (sqrt(pow(v_x - d->p->pos.x, 2) + \
-	pow(v_y - d->p->pos.y, 2)));
+	d->r->v_inter_x = x;
+	d->r->v_inter_y = y;
+	return (sqrt(pow(x - d->p->pos.x, 2) + pow(y - d->p->pos.y, 2)));
 }
 
-t_img	*get_texture(t_data *d, int flag)
-{
-	d->r->ray_angle = nor_angle(d->r->ray_angle);
-	if (flag == 0)
-	{
-		if (d->r->ray_angle > M_PI / 2 && d->r->ray_angle < 3 * (M_PI / 2))
-			return (d->ea);
-		else
-			return (d->we);
-	}
-	else
-	{
-		if (d->r->ray_angle > 0 && d->r->ray_angle < M_PI)
-			return (d->so);
-		else
-			return (d->no);
-	}
-}
 
-double	get_x_o(t_img	*texture, t_data *d)
-{
-	double	x_o;
-
-	if (d->r->flag == 1)
-		x_o = (int)fmodf((d->r->horiz_x * \
-		(texture->w / SIZE)), texture->w);
-	else
-		x_o = (int)fmodf((d->r->vert_y * \
-		(texture->w / SIZE)), texture->w);
-	return (x_o);
-}
-
-void	add_pixel(t_data *d, int x, int y, int color)
-{
-	if (x < 0)
-		return ;
-	else if (x >= WIN_X)
-		return ;
-	if (y < 0)
-		return ;
-	else if (y >= WIN_Y)
-		return ;
-	d->i->data[y * WIN_X + d->r->index] = color;
-}
-
-void	draw_wall(t_data *d, int t_pix, int b_pix, double wall_h)
-{
-	double			x_o;
-	double			y_o;
-	t_img			*texture;
-	double			factor;
-
-	texture = get_texture(d, d->r->flag);
-	factor = (double)texture->h / wall_h;
-	x_o = get_x_o(texture, d);
-	y_o = (t_pix - (WIN_Y / 2) + (wall_h / 2)) * factor;
-	if (y_o < 0)
-		y_o = 0;
-	while (t_pix < b_pix)
-	{
-		add_pixel(d, d->r->index, t_pix, texture->data[(int)y_o * texture->w + (int)x_o]);
-		y_o += factor;
-		t_pix++;
-	}
-}
-
-void	render_wall(t_data *d, int x)
-{
-	double	wall_h;
-	double	b_pix;
-	double	t_pix;
-
-	d->r->distance *= cos(nor_angle(d->r->ray_angle - d->p->dir));
-	wall_h = (SIZE / d->r->distance) * ((WIN_X / 2) / \
-	tan(d->p->fov / 2));
-	b_pix = (WIN_Y / 2) + (wall_h / 2);
-	t_pix = (WIN_Y / 2) - (wall_h / 2);
-	if (b_pix > WIN_Y)
-		b_pix = WIN_Y;
-	if (t_pix < 0)
-		t_pix = 0;
-	d->r->index = x;
-	draw_wall(d, t_pix, b_pix, wall_h);
-}
-
-void	cast_rays(t_data *d)
+void	raycast(t_data *d)
 {
 	double	h_inter;
 	double	v_inter;
@@ -226,16 +140,16 @@ void	cast_rays(t_data *d)
 	while (x < WIN_X)
 	{
 		d->r->flag = 0;
-		h_inter = get_h_inter(d, nor_angle(d->r->ray_angle));
-		v_inter = get_v_inter(d, nor_angle(d->r->ray_angle));
+		h_inter = get_h_inter(d, norm_angle(d->r->ray_angle));
+		v_inter = get_v_inter(d, norm_angle(d->r->ray_angle));
 		if (v_inter <= h_inter)
-			d->r->distance = v_inter;
+			d->r->dist = v_inter;
 		else
 		{
-			d->r->distance = h_inter;
-			d->r->flag = 1;
+			d->r->dist = h_inter;
+			d->r->flag = true;
 		}
-		render_wall(d, x);
+		render(d, x);
 		x++;
 		d->r->ray_angle += (d->p->fov / WIN_X);
 	}

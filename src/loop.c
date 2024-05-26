@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 17:43:18 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/26 13:11:26 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/27 00:10:05 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	background(void *_d)
 				d->i->data[y * WIN_X + x] = d->m->crgb;
 		}
 	}
-	cast_rays(d);
+	raycast(d);
 	mlx_put_image_to_window(d->mlx_ptr, d->mlx_win, d->i->ptr, 0, 0);
 	return (0);
 }
@@ -169,16 +169,16 @@ void	get_angle(t_data *d)
 
 	c = d->m->map[d->m->map_y][d->m->map_x];
 	if (c == 'N')
-		d->p->dir = 3 * M_PI / 2;
+		d->p->dir = 3 * PI / 2;
 	if (c == 'S')
-		d->p->dir = M_PI / 2;
+		d->p->dir = PI / 2;
 	if (c == 'E')
 		d->p->dir = 0;
 	if (c == 'W')
-		d->p->dir = M_PI;
+		d->p->dir = PI;
 	d->p->pos.x = (d->m->map_x * SIZE) + SIZE / 2;
 	d->p->pos.y = (d->m->map_y * SIZE) + SIZE / 2;
-	d->p->fov = (FOV * M_PI / 180);
+	d->p->fov = (FOV * PI / 180);
 }
 
 void	loop(t_data *d)
