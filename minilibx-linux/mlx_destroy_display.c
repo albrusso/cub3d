@@ -1,24 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   mlx_destroy_display.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mg <mg@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/20 14:49:49 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/27 08:52:46 by albrusso         ###   ########.fr       */
+/*   Created: 2020/10/03 18:56:35 by mg                #+#    #+#             */
+/*   Updated: 2020/10/04 01:55:35 by mg               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "mlx_int.h"
 
-int	main(int argc, char *argv[])
+int	mlx_destroy_display(t_xvar *xvar)
 {
-	t_data	*d;
-
-	d = ft_calloc(1, sizeof(t_data));
-	setup(d, argc, argv);
-	loop(d);
-	cleanup(d);
-	return (EXIT_SUCCESS);
+	XCloseDisplay(xvar->display);
 }

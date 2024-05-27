@@ -76,16 +76,3 @@ int	cleanup(t_data *d)
 	exit(EXIT_SUCCESS);
 	return (1);
 }
-
-void	arrfree(char **a)
-{
-	int	i;
-
-	if (!a)
-		return ;
-	i = -1;
-	while (a[++i])
-		free(a[i]);
-	free(a);
-	a = NULL;
-}

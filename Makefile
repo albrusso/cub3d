@@ -43,11 +43,13 @@ SRC		=	src/main.c \
 			src/initialize.c \
 			src/loop.c \
 			src/map.c \
+			src/map2.c \
 			src/raycasting.c \
-			src/render.c \
+			src/rendering.c \
 			src/setup.c \
 			src/utils.c \
-			src/checker.c
+			src/checker.c \
+			src/move.c
 
 OBJ		=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
@@ -87,6 +89,6 @@ run: $(NAME)
 	./$(NAME)
 
 mem: $(NAME)
-		valgrind --leak-check=full --show-leak-kinds=all ./$(NAME) map.cub
+		valgrind --leak-check=full --show-leak-kinds=all ./$(NAME) maps/map.cub
 
 .PHONY: all clean fclean re run mem

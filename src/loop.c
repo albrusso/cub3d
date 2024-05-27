@@ -73,11 +73,11 @@ int	keypress(int code, void *_d)
 void	loop(t_data *d)
 {
 	d->mlx_ptr = mlx_init();
-	d->mlx_win = mlx_new_window(d->mlx_ptr, WIN_X, WIN_Y, "cub3d");
 	load_img(d, d->no, d->m->no_tex);
 	load_img(d, d->so, d->m->so_tex);
 	load_img(d, d->we, d->m->we_tex);
 	load_img(d, d->ea, d->m->ea_tex);
+	d->mlx_win = mlx_new_window(d->mlx_ptr, WIN_X, WIN_Y, "cub3d");
 	d->i->ptr = mlx_new_image(d->mlx_ptr, WIN_X, WIN_Y);
 	d->i->data = (int *)mlx_get_data_addr(d->i->ptr, &d->i->bits, \
 		&d->i->len, &d->i->endian);

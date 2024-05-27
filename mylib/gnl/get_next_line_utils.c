@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 13:13:52 by albrusso          #+#    #+#             */
-/*   Updated: 2024/04/23 14:49:40 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/27 15:13:27 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	*ft_calloc_gnl(size_t count, size_t size)
 	i = 0;
 	memory = malloc(count * size);
 	if (memory == NULL)
-		return (0);
+		return (NULL);
 	while (i < count * size)
 	{
 		memory[i] = 0;
@@ -57,8 +57,6 @@ char	*ft_strjoin_gnl(char *s1, char *s2)
 		while (s2[j])
 			j++;
 	buffer = (char *)ft_calloc_gnl(i + j + 1, 1);
-	if (buffer == NULL)
-		return (NULL);
 	j = -1;
 	while (s1[++j])
 		buffer[j] = s1[j];

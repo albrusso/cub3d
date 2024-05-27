@@ -35,7 +35,7 @@ double	find_tex_x(t_img	*t, t_data *d)
 {
 	double	tex_x;
 
-	if (d->r->flag == 1)
+	if (d->r->flag)
 		tex_x = (int)fmodf((d->r->h_inter_x * (t->w / SIZE)), t->w);
 	else
 		tex_x = (int)fmodf((d->r->v_inter_y * (t->w / SIZE)), t->w);

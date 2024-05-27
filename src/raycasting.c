@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:21:56 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/27 09:11:16 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/27 15:48:08 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	inter_check(float angle, float *inter, float *step, char c)
 	}
 	else
 	{
-		if (!(angle > PI / 2 && angle < 3 * PI / 2))
+		if (angle < PI / 2 || angle > 3 * PI / 2)
 		{
 			*inter += SIZE;
 			return (-1);

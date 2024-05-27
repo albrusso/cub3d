@@ -33,15 +33,15 @@
 # define SIZE   64
 # define FOV           60
 # define SPIN_SPEED     0.045
-# define PLAYER_SPEED   0.5
+# define PLAYER_SPEED   6
 
-# define ESC    53
-# define UP     13
-# define DOWN   1
-# define LEFT   0
-# define RIGHT  2
-# define TURN_RIGHT 124
-# define TURN_LEFT  123
+# define ESC    65307
+# define UP     119
+# define DOWN   115
+# define LEFT   97
+# define RIGHT  100
+# define TURN_RIGHT 65363
+# define TURN_LEFT  65361
 # define MAP_KEY    109
 
 typedef struct s_raycast
@@ -58,11 +58,10 @@ typedef struct s_raycast
 
 typedef struct s_player
 {
-	t_point	pos;
-	int		x;
-	int		y;
-	double	fov;
-	double	dir;
+	double		x;
+	double		y;
+	double		fov;
+	double		dir;
 }	t_player;
 
 typedef struct s_map
@@ -108,27 +107,27 @@ typedef struct s_data
 }	t_data;
 
 void	setup(t_data *d, int argc, char *argv[]);
-
+void	ok_map(t_data *d);
+int		ok_line(t_data *d, t_map *m, char **a);
+int		nsew(char c);
+int		finish(t_map *m);
+void	add_tex(t_map *m, char **a);
+void	add_rgb(t_data *d, t_map *m, char **a);
+void	skip_space(char *s, int *j);
+void	map_dimension(t_map *m, char **map);
 void	handle_error(t_data *d, char *s);
-
 void	initialize(t_data *d, char *s);
-
 void	arrfree(char **a);
 int		cleanup(t_data *d);
-
 void	map(t_data *d, t_map *m, char *s);
-
 void	loop(t_data *d);
-
 void	check_move(t_data *d, int keypress);
-
 void	raycast(t_data *d);
-
 void	render(t_data *d, int x);
-
 float	norm_angle(float angle);
 int		in_range(float angle, char c);
 double	get_player_direction(char c);
-
+void	get_info(t_data *d, int i, int j);
+int		keypress(int code, void *_d);
 
 #endif

@@ -47,3 +47,16 @@ double	get_player_direction(char c)
 	else
 		return (PI);
 }
+
+void	arrfree(char **a)
+{
+	int	i;
+
+	if (!a)
+		return ;
+	i = -1;
+	while (a[++i])
+		free(a[i]);
+	free(a);
+	a = NULL;
+}

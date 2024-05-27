@@ -69,7 +69,7 @@ static void	is_close(t_data *d)
 	}
 }
 
-static void	ok_map(t_data *d)
+void	ok_map(t_data *d)
 {
 	int		i;
 	int		j;
