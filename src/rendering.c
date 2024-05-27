@@ -6,12 +6,11 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 16:35:00 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/27 00:41:00 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/27 09:00:39 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
-
 
 t_img	*find_texture(t_data *d, int flag)
 {

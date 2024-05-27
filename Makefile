@@ -6,7 +6,7 @@
 #    By: albrusso <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/19 19:08:41 by albrusso          #+#    #+#              #
-#    Updated: 2024/05/27 00:48:16 by albrusso         ###   ########.fr        #
+#    Updated: 2024/05/27 09:16:25 by albrusso         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,9 @@ SRC		=	src/main.c \
 			src/map.c \
 			src/raycasting.c \
 			src/render.c \
-			src/setup.c
+			src/setup.c \
+			src/utils.c \
+			src/checker.c
 
 OBJ		=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 

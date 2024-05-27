@@ -6,7 +6,7 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:11:56 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/27 00:41:06 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/27 09:14:01 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "mylib/libft/libft.h"
 # include "mylib/gnl/get_next_line.h"
 # include "mylib/ft_printf/ft_printf.h"
-# include "./minilibx/mlx.h"
+# include "./minilibx-linux/mlx.h"
 
 # include <stdbool.h>
 # include <math.h>
@@ -44,12 +44,6 @@
 # define TURN_LEFT  123
 # define MAP_KEY    109
 
-typedef struct s_point
-{
-	float	x;
-	float	y;
-}	t_point;
-
 typedef struct s_raycast
 {
 	double	dist;
@@ -65,7 +59,6 @@ typedef struct s_raycast
 typedef struct s_player
 {
 	t_point	pos;
-	t_point	next;
 	int		x;
 	int		y;
 	double	fov;
@@ -100,24 +93,6 @@ typedef struct s_img
 	int		endian;
 }	t_img;
 
-typedef struct s_face
-{
-	bool	up;
-	bool	down;
-	bool	right;
-	bool	left;
-}	t_face;
-
-typedef struct s_cast
-{
-	t_point	step;
-	t_point	next;
-	t_point	intercept;
-	t_point	hit_wall;
-	double	distance;
-	bool	find_wall;
-}	t_cast;
-
 typedef struct s_data
 {
 	t_map		*m;
@@ -142,15 +117,18 @@ void	arrfree(char **a);
 int		cleanup(t_data *d);
 
 void	map(t_data *d, t_map *m, char *s);
+
 void	loop(t_data *d);
+
+void	check_move(t_data *d, int keypress);
 
 void	raycast(t_data *d);
 
+void	render(t_data *d, int x);
 
 float	norm_angle(float angle);
+int		in_range(float angle, char c);
+double	get_player_direction(char c);
 
-void	cast_rays(t_data *d);
-
-void	render(t_data *d, int x);
 
 #endif

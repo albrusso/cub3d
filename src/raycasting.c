@@ -6,35 +6,11 @@
 /*   By: albrusso <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:21:56 by albrusso          #+#    #+#             */
-/*   Updated: 2024/05/27 00:40:29 by albrusso         ###   ########.fr       */
+/*   Updated: 2024/05/27 09:11:16 by albrusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
-
-float	norm_angle(float angle)
-{
-	if (angle < 0)
-		angle += (2 * PI);
-	if (angle > (2 * PI))
-		angle -= (2 * PI);
-	return (angle);
-}
-
-int	in_range(float angle, char c)
-{
-	if (c == 'x')
-	{
-		if (angle > 0 && angle < PI)
-			return (1);
-	}
-	else if (c == 'y')
-	{
-		if (angle > (PI / 2) && angle < (3 * PI) / 2)
-			return (1);
-	}
-	return (0);
-}
 
 int	inter_check(float angle, float *inter, float *step, char c)
 {
@@ -86,9 +62,9 @@ float	get_h_inter(t_data *d, float angl)
 
 	step_y = SIZE;
 	step_x = SIZE / tan(angl);
-	y = floor(d->p->pos.y / SIZE) * SIZE;
+	y = floor(d->p->y / SIZE) * SIZE;
 	pixel = inter_check(angl, &y, &step_y, 'h');
-	x = d->p->pos.x + (y - d->p->pos.y) / tan(angl);
+	x = d->p->x + (y - d->p->y) / tan(angl);
 	if ((in_range(angl, 'y') && step_x > 0) || \
 		(!in_range(angl, 'y') && step_x < 0))
 		step_x *= -1;
@@ -99,7 +75,7 @@ float	get_h_inter(t_data *d, float angl)
 	}
 	d->r->h_inter_x = x;
 	d->r->h_inter_y = y;
-	return (sqrt(pow(x - d->p->pos.x, 2) + pow(y - d->p->pos.y, 2)));
+	return (sqrt(pow(x - d->p->x, 2) + pow(y - d->p->y, 2)));
 }
 
 float	get_v_inter(t_data *d, float angl)
@@ -112,9 +88,9 @@ float	get_v_inter(t_data *d, float angl)
 
 	step_x = SIZE;
 	step_y = SIZE * tan(angl);
-	x = floor(d->p->pos.x / SIZE) * SIZE;
+	x = floor(d->p->x / SIZE) * SIZE;
 	pixel = inter_check(angl, &x, &step_x, 'v');
-	y = d->p->pos.y + (x - d->p->pos.x) * tan(angl);
+	y = d->p->y + (x - d->p->x) * tan(angl);
 	if ((in_range(angl, 'x') && step_y < 0) || \
 	(!in_range(angl, 'x') && step_y > 0))
 		step_y *= -1;
@@ -125,9 +101,8 @@ float	get_v_inter(t_data *d, float angl)
 	}
 	d->r->v_inter_x = x;
 	d->r->v_inter_y = y;
-	return (sqrt(pow(x - d->p->pos.x, 2) + pow(y - d->p->pos.y, 2)));
+	return (sqrt(pow(x - d->p->x, 2) + pow(y - d->p->y, 2)));
 }
-
 
 void	raycast(t_data *d)
 {
